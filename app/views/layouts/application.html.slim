@@ -1,0 +1,15 @@
+doctype html
+html
+  head
+    title RabbitMQ Showcase
+    = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true
+    = javascript_include_tag "application", "data-turbolinks-track" => true
+    = csrf_meta_tags
+
+  body
+    header
+      .container
+        = render "layouts/navigation"
+    main role="main"
+      = yield
+
