@@ -13,7 +13,7 @@ Rails.application.configure do
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
 
-  # Don't care if the mailer can't send.
+  # Don"t care if the mailer can"t send.
   config.action_mailer.raise_delivery_errors = false
 
   # Print deprecation notices to the Rails logger.
@@ -38,4 +38,10 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  # unicorn settings, run with RACK_ENV=none RAILS_ENV=development unicorn -c config/unicorn.rb
+  config.logger = Logger.new(STDOUT)
+    config.logger.level = Logger.const_get(
+      ENV["LOG_LEVEL"] ? ENV["LOG_LEVEL"].upcase : "DEBUG"
+    )
 end
