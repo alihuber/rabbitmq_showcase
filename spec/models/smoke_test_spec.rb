@@ -1,5 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe SmokeTest, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it "has a factory" do
+    expect(build :smoke_test).to be_valid
+  end
 end
