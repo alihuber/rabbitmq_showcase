@@ -1,6 +1,16 @@
+ENV["RAILS_ENV"] ||= "test"
+require File.expand_path("../../config/environment", __FILE__)
+
+require "rspec/rails"
+require "capybara/rails"
+require "capybara/rspec"
 require "factory_girl"
 
+
 RSpec.configure do |config|
+  config.use_transactional_fixtures = true
+  config.include Capybara::DSL
+
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
   end
