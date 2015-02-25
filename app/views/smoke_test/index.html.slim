@@ -3,4 +3,13 @@
     .col-md-12
       .alert.alert-info role="alert"
         This is a smoke test. Records will be created by sending a message to the 'default' queue.
-
+      .pull-right
+        = button_to "Delete Records", "smoke_test", method: :delete,
+          class: "btn btn-danger", id: "delete_smoke_tests"
+        br
+      table.table.table-striped
+        tr
+          th ID
+          th Message
+          th Created At
+        = render partial: "smoke_test", collection: @smoke_tests
