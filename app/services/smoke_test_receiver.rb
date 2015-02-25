@@ -1,8 +1,8 @@
 class SmokeTestReceiver
 
   def initialize(delivery_info, properties, body)
-    # create_record(body)
-    puts body
+    Rails.logger.debug "Received message #{body}"
+    create_record(body)
   end
 
   private
