@@ -7,9 +7,4 @@
         = button_to "Delete Records", "smoke_test", method: :delete,
           class: "btn btn-danger", id: "delete_smoke_tests"
         br
-      table.table.table-striped
-        tr
-          th ID
-          th Message
-          th Created At
-        = render partial: "smoke_test", collection: @smoke_tests
+      = render "working_queue"

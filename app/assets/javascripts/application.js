@@ -15,3 +15,11 @@
 //= require bootstrap
 //= require turbolinks
 //= require_tree .
+
+// $(document).ready(function() {
+//   setInterval(function() {
+//     return $.get("/smoke_test_ajax_progress", function(response){
+//       return $("#working-queue").replaceWith(response);
+//     });
+//   }, 1000)
+// });
