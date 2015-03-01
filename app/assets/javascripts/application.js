@@ -16,10 +16,15 @@
 //= require turbolinks
 //= require_tree .
 
-// $(document).ready(function() {
-//   setInterval(function() {
-//     return $.get("/smoke_test_ajax_progress", function(response){
-//       return $("#working-queue").replaceWith(response);
-//     });
-//   }, 1000)
-// });
+$(document).ready(function() {
+  setInterval(function() {
+    return $.get("/smoke_test_ajax_progress", function(response){
+      return $("#working-queue").replaceWith(response);
+    });
+  }, 2000)
+  setInterval(function() {
+    return $.get("/topic_ajax_progress", function(response){
+      return $("#working-queue-topics").replaceWith(response);
+    });
+  }, 2000)
+});

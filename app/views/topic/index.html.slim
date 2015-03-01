@@ -1,0 +1,12 @@
+.container
+  .row
+    .col-md-12
+      .alert.alert-info role="alert"
+        = "This page displays messages that are sent to the channel topic namespace <b>'log'.</b><br>".html_safe
+      .pull-right
+        = button_to "Delete Records", "topic", method: :delete,
+          class: "btn btn-danger", id: "delete_topics"
+        br
+  .row
+    .col-md-12
+      = render "working_queue"

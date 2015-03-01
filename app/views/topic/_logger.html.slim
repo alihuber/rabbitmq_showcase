@@ -1,0 +1,18 @@
+.alert.alert-info role="alert"
+  = "This table displays all messages that were fetched by the channel queue that listens to subtopic <b>logger.#</b><br>".html_safe
+table#working-queue-debug.table.table-striped
+  tr
+    th ID
+    th Routing key
+    th Message
+    th Created at
+  - @logger_topics.each do |topic|
+    tr
+      td
+        = topic.id
+      td
+        = topic.routing_key
+      td
+        = topic.message
+      td
+        = topic.created_at
