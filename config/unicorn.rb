@@ -1,10 +1,18 @@
 listen 3000, tcp_nopush: false
 
 if ENV["RAILS_ENV"] == "development"
-  worker_processes 3
+  worker_processes 1
 else
-  worker_processes 3
+  worker_processes 1
 end
+
+CONN_SETTINGS = {
+  host: "192.168.0.12",
+  vhost: "test",
+  user: "ubuntu",
+  password: "ubuntu",
+  autmatically_recover: false
+}
 
 
 timeout 30
@@ -26,13 +34,10 @@ after_fork do |server, worker|
   # the following is *required* for Rails + "preload_app true",
   defined?(ActiveRecord::Base) and ActiveRecord::Base.establish_connection
 
+  # Setup for smoke test
   Thread.new do
     begin
-      rabbitmq_connection = Bunny.new(host: "192.168.0.12",
-                                      vhost: "test",
-                                      user: "ubuntu",
-                                      password: "ubuntu",
-                                      automatically_recover: false)
+      rabbitmq_connection = Bunny.new(CONN_SETTINGS)
       rabbitmq_connection.start
     rescue Bunny::TCPConnectionFailed => e
       puts "Connection failed"
@@ -44,19 +49,17 @@ after_fork do |server, worker|
         SmokeTestReceiver.new(delivery_info, properties, body)
       end
     rescue Bunny::PreconditionFailed => e
-      puts "Channel-level exception! Code: #{e.channel_close.reply_code}, message: #{e.channel_close.reply_text}"
+      puts "Channel-level exception! Code: #{e.channel_close.reply_code},
+      message: #{e.channel_close.reply_text}".squish
     ensure
       rabbitmq_connection.create_channel.queue_delete(default_queue)
     end
   end
 
+  # Setup for topic #1
   Thread.new do
     begin
-      rabbitmq_connection = Bunny.new(host: "192.168.0.12",
-                                      vhost: "test",
-                                      user: "ubuntu",
-                                      password: "ubuntu",
-                                      automatically_recover: false)
+      rabbitmq_connection = Bunny.new(CONN_SETTINGS)
       rabbitmq_connection.start
     rescue Bunny::TCPConnectionFailed => e
       puts "Connection failed"
@@ -72,19 +75,17 @@ after_fork do |server, worker|
       end
       debug_queue.subscribe_with(debug_consumer, block: false)
     rescue Bunny::PreconditionFailed => e
-      puts "Channel-level exception! Code: #{e.channel_close.reply_code}, message: #{e.channel_close.reply_text}"
+      puts "Channel-level exception! Code: #{e.channel_close.reply_code},
+      message: #{e.channel_close.reply_text}".squish
     ensure
       rabbitmq_connection.create_channel.queue_delete(debug_queue)
     end
   end
 
+  # Setup for topic #2
   Thread.new do
     begin
-      rabbitmq_connection = Bunny.new(host: "192.168.0.12",
-                                      vhost: "test",
-                                      user: "ubuntu",
-                                      password: "ubuntu",
-                                      automatically_recover: false)
+      rabbitmq_connection = Bunny.new(CONN_SETTINGS)
       rabbitmq_connection.start
     rescue Bunny::TCPConnectionFailed => e
       puts "Connection failed"
@@ -100,19 +101,17 @@ after_fork do |server, worker|
       end
       info_queue.subscribe_with(info_consumer, block: false)
     rescue Bunny::PreconditionFailed => e
-      puts "Channel-level exception! Code: #{e.channel_close.reply_code}, message: #{e.channel_close.reply_text}"
+      puts "Channel-level exception! Code: #{e.channel_close.reply_code},
+      message: #{e.channel_close.reply_text}".squish
     ensure
       rabbitmq_connection.create_channel.queue_delete(info_queue)
     end
   end
 
+  # Setup for topic #3
   Thread.new do
     begin
-      rabbitmq_connection = Bunny.new(host: "192.168.0.12",
-                                      vhost: "test",
-                                      user: "ubuntu",
-                                      password: "ubuntu",
-                                      automatically_recover: false)
+      rabbitmq_connection = Bunny.new(CONN_SETTINGS)
       rabbitmq_connection.start
     rescue Bunny::TCPConnectionFailed => e
       puts "Connection failed"

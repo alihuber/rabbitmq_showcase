@@ -8,8 +8,7 @@ class TopicReceiver
   private
   def create_record(routing_key, body)
     # wait until others are inserted
-    r = Random.new
-    sleep r.rand(2.0)
+    sleep Random.new.rand(2.0)
     existing_message =
       Topic.where("routing_key = ? AND message = ?", routing_key, body)
     unless existing_message.any?

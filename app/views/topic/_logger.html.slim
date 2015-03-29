@@ -15,4 +15,4 @@ table#working-queue-debug.table.table-striped
       td
         = topic.message
       td
-        = topic.created_at
+        = I18n.l(topic.created_at, format: :short)
