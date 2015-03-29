@@ -27,4 +27,3 @@ class TopicController < ApplicationController
     @logger_topics   = Topic.where("routing_key LIKE ?", "%logger.%")
   end
 end
-

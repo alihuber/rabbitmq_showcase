@@ -23,4 +23,3 @@ class WorkerController < ApplicationController
     @worker_messages = WorkerMessage.all
   end
 end
-

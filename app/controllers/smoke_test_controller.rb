@@ -23,4 +23,3 @@ class SmokeTestController < ApplicationController
     @smoke_tests = SmokeTest.all
   end
 end
-
