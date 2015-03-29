@@ -1,0 +1,15 @@
+.container
+  .row
+    .col-md-12
+      .alert.alert-info role="alert"
+        = "This is an example for round-robin dispatching into"\
+        " 'worker' consumers that will do background work for a set amount of"\
+        " time before inserting records.<br> Messages sent to the"\
+        " <b>'task_queue'</b> queue will be processed by 2 parallel consumers"\
+        " subscribed to the queue and both have the same prefetch-setting"\
+        " of '1'.".html_safe
+      .pull-right
+        = button_to "Delete Records", "worker", method: :delete,
+          class: "btn btn-danger", id: "delete_worker_messages"
+        br
+      = render "working_queue"

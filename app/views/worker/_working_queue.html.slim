@@ -1,0 +1,7 @@
+table#working-queue-worker.table.table-striped
+  tr
+    th ID
+    th Message
+    th Work time
+    th Created at
+  = render partial: "worker_message", collection: @worker_messages

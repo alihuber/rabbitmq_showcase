@@ -27,4 +27,9 @@ $(document).ready(function() {
       return $("#working-queue-topics").replaceWith(response);
     });
   }, 2000)
+  setInterval(function() {
+    return $.get("/worker_ajax_progress", function(response){
+      return $("#working-queue-worker").replaceWith(response);
+    });
+  }, 2000)
 });

@@ -1,0 +1,9 @@
+tr
+  td
+    = worker_message.id
+  td
+    = worker_message.message
+  td
+    = worker_message.work_time
+  td
+    = I18n.l(worker_message.created_at, format: :short)

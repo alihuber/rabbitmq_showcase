@@ -127,9 +127,62 @@ after_fork do |server, worker|
       end
       logger_queue.subscribe_with(logger_consumer, block: false)
     rescue Bunny::PreconditionFailed => e
-      puts "Channel-level exception! Code: #{e.channel_close.reply_code}, message: #{e.channel_close.reply_text}"
+      puts "Channel-level exception! Code: #{e.channel_close.reply_code},
+      message: #{e.channel_close.reply_text}".squish
     ensure
       rabbitmq_connection.create_channel.queue_delete(logger_queue)
+    end
+  end
+
+  # Setup for worker consumer #1
+  Thread.new do
+    begin
+      rabbitmq_connection = Bunny.new(CONN_SETTINGS)
+      rabbitmq_connection.start
+    rescue Bunny::TCPConnectionFailed => e
+      puts "Connection failed"
+    end
+    begin
+      rabbitmq_channel = rabbitmq_connection.create_channel
+      worker_queue_1   = rabbitmq_channel.queue("task_queue", durable: true)
+      rabbitmq_channel.prefetch(1)
+      worker_queue_1.subscribe(manual_ack: true, block: false) do |info, prop, body|
+        # simulate work with data from 'type' property (number string)
+        sleep prop.type.to_i
+        WorkerReceiver.new(info, prop, body)
+        rabbitmq_channel.ack(info.delivery_tag)
+      end
+    rescue Bunny::PreconditionFailed => e
+      puts "Channel-level exception! Code: #{e.channel_close.reply_code},
+      message: #{e.channel_close.reply_text}".squish
+    ensure
+      rabbitmq_connection.create_channel.queue_delete(worker_queue_1)
+    end
+  end
+
+  # Setup for worker consumer #2
+  Thread.new do
+    begin
+      rabbitmq_connection = Bunny.new(CONN_SETTINGS)
+      rabbitmq_connection.start
+    rescue Bunny::TCPConnectionFailed => e
+      puts "Connection failed"
+    end
+    begin
+      rabbitmq_channel = rabbitmq_connection.create_channel
+      worker_queue_2   = rabbitmq_channel.queue("task_queue", durable: true)
+      rabbitmq_channel.prefetch(1)
+      worker_queue_2.subscribe(manual_ack: true, block: false) do |info, prop, body|
+        # simulate work with data from 'type' property (number string)
+        sleep prop.type.to_i
+        WorkerReceiver.new(info, prop, body)
+        rabbitmq_channel.ack(info.delivery_tag)
+      end
+    rescue Bunny::PreconditionFailed => e
+      puts "Channel-level exception! Code: #{e.channel_close.reply_code},
+      message: #{e.channel_close.reply_text}".squish
+    ensure
+      rabbitmq_connection.create_channel.queue_delete(worker_queue_2)
     end
   end
 end

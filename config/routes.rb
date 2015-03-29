@@ -8,4 +8,8 @@ Rails.application.routes.draw do
   get "topic" => "topic#index"
   get "topic_ajax_progress" => "topic#ajax_progress", as: "topic_ajax_progress"
   delete "topic" => "topic#delete"
+
+  get "worker" => "worker#index"
+  get "worker_ajax_progress" => "worker#ajax_progress", as: "worker_ajax_progress"
+  delete "worker" => "worker#delete"
 end
