@@ -12,4 +12,9 @@ Rails.application.routes.draw do
   get "worker" => "worker#index"
   get "worker_ajax_progress" => "worker#ajax_progress", as: "worker_ajax_progress"
   delete "worker" => "worker#delete"
+
+  get "workflow" => "workflow#index"
+  get("workflow_ajax_progress" => "workflow#ajax_progress",
+      as: "workflow_ajax_progress")
+  delete "workflow" => "workflow#delete"
 end

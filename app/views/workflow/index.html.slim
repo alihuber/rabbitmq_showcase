@@ -1,0 +1,14 @@
+.container
+  .row
+    .col-md-12
+      .alert.alert-info role="alert"
+        = "Example for workflow queues using <b>sneakers.io</b>. Messages will"\
+        " be consumed by sneakers.io worker classes (that have to be executed"\
+        " in a certain order) and the messages have to be persisted and"\
+        " re-enqueued if processing failed.<br> Done messages will appear in"\
+        " this table when they have successfully been processed.".html_safe
+      .pull-right
+        = button_to "Delete Records", "workflow", method: :delete,
+          class: "btn btn-danger", id: "delete_workflow_messages"
+        br
+      = render "working_queue"

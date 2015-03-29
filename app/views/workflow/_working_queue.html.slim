@@ -1,0 +1,6 @@
+table#working-queue-workflow.table.table-striped
+  tr
+    th ID
+    th Message
+    th Created at
+  = render partial: "workflow_message", collection: @workflow_messages
