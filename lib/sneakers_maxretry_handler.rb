@@ -8,7 +8,7 @@ module Sneakers
         end
 
         @channel = channel
-        @opts = opts
+        @opts    = opts
 
         # Construct names, defaulting where suitable
         retry_name   = "#{@worker_queue_name}-retry"
@@ -18,9 +18,9 @@ module Sneakers
         # Create the exchanges
         @retry_exchange, @error_exchange, @requeue_exchange =
           [retry_name, error_name, requeue_name].map do |name|
-          Sneakers.logger.debug { "#{log_prefix} creating exchange=#{name}" }
-          @channel.exchange(name, type: "topic", durable: opts[:durable])
-        end
+            Sneakers.logger.debug { "#{log_prefix} creating exchange=#{name}" }
+            @channel.exchange(name, type: "topic", durable: opts[:durable])
+          end
 
         # Create the queues and bindings
         Sneakers.logger.debug do
@@ -31,7 +31,7 @@ module Sneakers
           @channel.queue(retry_name, :durable => opts[:durable],
                          :arguments => {
                            :'x-dead-letter-exchange' => requeue_name,
-                           :'x-message-ttl' => @opts[:retry_timeout] || 60000
+                           :'x-message-ttl' => @opts[:retry_timeout]
                          })
         @retry_queue.bind(@retry_exchange, routing_key: "#")
 
@@ -43,7 +43,7 @@ module Sneakers
 
         # Finally, bind the worker queue to our requeue exchange
         queue.bind(@requeue_exchange, routing_key: "#")
-        @max_retries = @opts[:retry_max_times] || 5
+        @max_retries = @opts[:retry_max_times]
       end
 
       def acknowledge(hdr, props, msg)
@@ -53,7 +53,7 @@ module Sneakers
       def reject(hdr, props, msg, requeue = false)
         if requeue
           # This was explicitly rejected specifying it be requeued so we do not
-          # want it to pass through our retry logic.
+          # want it to pass through our retry logic
           @channel.reject(hdr.delivery_tag, requeue)
         else
           handle_retry(hdr, props, msg, :reject)

@@ -18,7 +18,7 @@ class WorkflowOutWorker
 
 
   def work(msg)
-    logger.info("Received workflow_out message: #{msg}")
+    logger.info("Received 'workflow_out' message: #{msg}")
     WorkflowMessage.create(message: msg)
     logger.info("Finished 'workflow_out'")
     ack!
