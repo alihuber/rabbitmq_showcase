@@ -10,19 +10,18 @@ module Sneakers
         @channel = channel
         @opts    = opts
 
-        # Construct names, defaulting where suitable
         retry_name   = "#{@worker_queue_name}-retry"
         error_name   = "#{@worker_queue_name}-error"
         requeue_name = "#{@worker_queue_name}-retry-requeue"
 
-        # Create the exchanges
+        # Create exchanges
         @retry_exchange, @error_exchange, @requeue_exchange =
           [retry_name, error_name, requeue_name].map do |name|
             Sneakers.logger.debug { "#{log_prefix} creating exchange=#{name}" }
             @channel.exchange(name, type: "topic", durable: opts[:durable])
           end
 
-        # Create the queues and bindings
+        # Create queues and bindings
         Sneakers.logger.debug do
           "#{log_prefix} creating queue=#{retry_name}"\
           " x-dead-letter-exchange=#{requeue_name}"
@@ -91,21 +90,7 @@ module Sneakers
             "#{log_prefix} msg=failing, retry_count=#{num_attempts},"\
             " reason=#{reason}"
           end
-          data = {
-            error: reason,
-            num_attempts: num_attempts,
-            failed_at: Time.now.iso8601,
-            payload: Base64.encode64(msg.to_s)
-          }.tap do |hash|
-            if reason.is_a?(Exception)
-              hash[:error_class] = reason.class
-              hash[:error_message] = "#{reason}"
-              if reason.backtrace
-                hash[:backtrace] = reason.backtrace.take(10).join(", ")
-              end
-            end
-          end.to_json
-          @error_exchange.publish(data, routing_key: hdr.routing_key)
+          @error_exchange.publish(msg, routing_key: hdr.routing_key)
           @channel.acknowledge(hdr.delivery_tag, false)
         end
       end
