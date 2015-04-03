@@ -1,9 +1,9 @@
 listen 3000, tcp_nopush: false
 
 if ENV["RAILS_ENV"] == "development"
-  worker_processes 1
+  worker_processes 3
 else
-  worker_processes 1
+  worker_processes 3
 end
 
 CONN_SETTINGS = {
@@ -18,19 +18,19 @@ CONN_SETTINGS = {
 timeout 30
 preload_app true
 
-
-after_fork do |server, worker|
-  require "bunny"
-  class TopicConsumer < Bunny::Consumer
-    def cancelled?
-      @cancelled
-    end
-
-    def handle_cancellation(_)
-      @cancelled = true
-    end
+require "bunny"
+class TopicConsumer < Bunny::Consumer
+  def cancelled?
+    @cancelled
   end
 
+  def handle_cancellation(_)
+    @cancelled = true
+  end
+end
+
+
+after_fork do |server, worker|
   # the following is *required* for Rails + "preload_app true",
   defined?(ActiveRecord::Base) and ActiveRecord::Base.establish_connection
 
@@ -67,7 +67,7 @@ after_fork do |server, worker|
     begin
       rabbitmq_channel = rabbitmq_connection.create_channel
       topic            = rabbitmq_channel.topic("log")
-      debug_queue      = rabbitmq_channel.queue("debug", exclusive: true)
+      debug_queue      = rabbitmq_channel.queue("debug")
       debug_consumer   = TopicConsumer.new(rabbitmq_channel, debug_queue)
       debug_queue.bind(topic, routing_key: "debug.*")
       debug_consumer.on_delivery() do |delivery_info, properties, body|
@@ -93,7 +93,7 @@ after_fork do |server, worker|
     begin
       rabbitmq_channel = rabbitmq_connection.create_channel
       topic            = rabbitmq_channel.topic("log")
-      info_queue       = rabbitmq_channel.queue("info", exclusive: true)
+      info_queue       = rabbitmq_channel.queue("info")
       info_consumer    = TopicConsumer.new(rabbitmq_channel, info_queue)
       info_queue.bind(topic, routing_key: "*.info")
       info_consumer.on_delivery() do |delivery_info, properties, body|
@@ -119,7 +119,7 @@ after_fork do |server, worker|
     begin
       rabbitmq_channel = rabbitmq_connection.create_channel
       topic            = rabbitmq_channel.topic("log")
-      logger_queue     = rabbitmq_channel.queue("logger", exclusive: true)
+      logger_queue     = rabbitmq_channel.queue("logger")
       logger_consumer  = TopicConsumer.new(rabbitmq_channel, logger_queue)
       logger_queue.bind(topic, routing_key: "logger.#")
       logger_consumer.on_delivery() do |delivery_info, properties, body|
