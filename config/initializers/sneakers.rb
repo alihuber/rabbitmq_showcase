@@ -18,3 +18,4 @@ Sneakers.configure  heartbeat: 2000,
                     threads: 4,
                     prefetch: 4,
                     log: STDOUT
+Sneakers.logger.level = Logger::INFO
