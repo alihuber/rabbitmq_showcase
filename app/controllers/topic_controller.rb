@@ -1,10 +1,7 @@
 class TopicController < ApplicationController
 
   def index
-    @debugger_topics = Topic.where("routing_key LIKE ?", "%debug.%")
-    @info_topics     = Topic.where("routing_key LIKE ?", "%.info%" )
-    @logger_topics   = Topic.where("routing_key LIKE ?", "%logger.%")
-    render stream: true
+    get_records
   end
 
   def delete
@@ -13,7 +10,7 @@ class TopicController < ApplicationController
   end
 
   def ajax_progress
-    set_working_queue
+    get_records
 
     render partial: "working_queue"
   end
@@ -21,7 +18,7 @@ class TopicController < ApplicationController
 
   private
 
-  def set_working_queue
+  def get_records
     @debugger_topics = Topic.where("routing_key LIKE ?", "%debug.%")
     @info_topics     = Topic.where("routing_key LIKE ?", "%.info%" )
     @logger_topics   = Topic.where("routing_key LIKE ?", "%logger.%")

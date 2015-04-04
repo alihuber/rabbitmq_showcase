@@ -2,7 +2,6 @@ class WorkflowController < ApplicationController
 
   def index
     @workflow_messages = WorkflowMessage.all
-    render stream: true
   end
 
   def delete
@@ -11,15 +10,8 @@ class WorkflowController < ApplicationController
   end
 
   def ajax_progress
-    set_working_queue
+    @workflow_messages = WorkflowMessage.all
 
     render partial: "working_queue"
-  end
-
-
-  private
-
-  def set_working_queue
-    @workflow_messages = WorkflowMessage.all
   end
 end
