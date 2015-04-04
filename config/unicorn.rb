@@ -45,7 +45,7 @@ after_fork do |server, worker|
     begin
       rabbitmq_channel = rabbitmq_connection.create_channel
       default_queue    = rabbitmq_channel.queue("default")
-      default_queue.subscribe(block: false) do |delivery_info, properties, body|
+      default_queue.subscribe do |delivery_info, properties, body|
         SmokeTestReceiver.new(delivery_info, properties, body)
       end
     rescue Bunny::PreconditionFailed => e
@@ -73,7 +73,7 @@ after_fork do |server, worker|
       debug_consumer.on_delivery() do |delivery_info, properties, body|
         TopicReceiver.new(delivery_info.routing_key, body)
       end
-      debug_queue.subscribe_with(debug_consumer, block: false)
+      debug_queue.subscribe_with(debug_consumer)
     rescue Bunny::PreconditionFailed => e
       puts "Channel-level exception! Code: #{e.channel_close.reply_code},
       message: #{e.channel_close.reply_text}".squish
@@ -99,7 +99,7 @@ after_fork do |server, worker|
       info_consumer.on_delivery() do |delivery_info, properties, body|
         TopicReceiver.new(delivery_info.routing_key, body)
       end
-      info_queue.subscribe_with(info_consumer, block: false)
+      info_queue.subscribe_with(info_consumer)
     rescue Bunny::PreconditionFailed => e
       puts "Channel-level exception! Code: #{e.channel_close.reply_code},
       message: #{e.channel_close.reply_text}".squish
@@ -125,7 +125,7 @@ after_fork do |server, worker|
       logger_consumer.on_delivery() do |delivery_info, properties, body|
         TopicReceiver.new(delivery_info.routing_key, body)
       end
-      logger_queue.subscribe_with(logger_consumer, block: false)
+      logger_queue.subscribe_with(logger_consumer)
     rescue Bunny::PreconditionFailed => e
       puts "Channel-level exception! Code: #{e.channel_close.reply_code},
       message: #{e.channel_close.reply_text}".squish
@@ -146,7 +146,7 @@ after_fork do |server, worker|
       rabbitmq_channel = rabbitmq_connection.create_channel
       worker_queue_1   = rabbitmq_channel.queue("task_queue", durable: true)
       rabbitmq_channel.prefetch(1)
-      worker_queue_1.subscribe(manual_ack: true, block: false) do |info, prop, body|
+      worker_queue_1.subscribe(manual_ack: true) do |info, prop, body|
         # simulate work with data from 'type' property (number string)
         sleep prop.type.to_i
         WorkerReceiver.new(info, prop, body)
@@ -172,7 +172,7 @@ after_fork do |server, worker|
       rabbitmq_channel = rabbitmq_connection.create_channel
       worker_queue_2   = rabbitmq_channel.queue("task_queue", durable: true)
       rabbitmq_channel.prefetch(1)
-      worker_queue_2.subscribe(manual_ack: true, block: false) do |info, prop, body|
+      worker_queue_2.subscribe(manual_ack: true) do |info, prop, body|
         # simulate work with data from 'type' property (number string)
         sleep prop.type.to_i
         WorkerReceiver.new(info, prop, body)
