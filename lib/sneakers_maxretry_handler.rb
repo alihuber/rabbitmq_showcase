@@ -75,7 +75,7 @@ module Sneakers
       def handle_retry(hdr, props, msg, reason)
         # +1 for the current attempt
         num_attempts = failure_count(props[:headers]) + 1
-        if num_attempts <= @max_retries
+        if num_attempts < @max_retries
           # We call reject which will route the message to the
           # x-dead-letter-exchange (ie. retry exchange) on the queue
           Sneakers.logger.info do
@@ -90,7 +90,7 @@ module Sneakers
             "#{log_prefix} msg=failing, retry_count=#{num_attempts},"\
             " reason=#{reason}"
           end
-          @error_exchange.publish(msg, routing_key: hdr.routing_key)
+          @error_exchange.publish(msg.to_s, routing_key: hdr.routing_key)
           @channel.acknowledge(hdr.delivery_tag, false)
         end
       end
@@ -99,9 +99,7 @@ module Sneakers
         if headers.nil? || headers["x-death"].nil?
           0
         else
-          headers["x-death"].select do |x_death|
-            x_death["queue"] == @worker_queue_name
-          end.count
+          headers["x-death"].last["count"]
         end
       end
 
