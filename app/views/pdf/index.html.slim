@@ -1,0 +1,13 @@
+.container
+  .row
+    .col-md-8
+      = button_to "Fetch PDFs", "pdf", method: :post,
+        class: "btn btn-info", id: "fetch_pdfs"
+    .col-md-4
+      .pull-right
+        = button_to "Delete Records", "pdf", method: :delete,
+          class: "btn btn-danger", id: "delete_pdfs"
+        br
+  .row
+    .col-md-12
+      = render "working_queue"

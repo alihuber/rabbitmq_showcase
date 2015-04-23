@@ -1,0 +1,7 @@
+tr
+  td
+    = pdf.id
+  td
+    = I18n.l(pdf.created_at, format: :short)
+  td
+    = link_to pdf.file.url, pdf.file.url

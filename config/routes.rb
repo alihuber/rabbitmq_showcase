@@ -17,4 +17,9 @@ Rails.application.routes.draw do
   get("workflow_ajax_progress" => "workflow#ajax_progress",
       as: "workflow_ajax_progress")
   delete "workflow" => "workflow#delete"
+
+  get "pdf" => "pdf#index"
+  post "pdf" => "pdf#work"
+  get "pdf_ajax_progress" => "pdf#ajax_progress", as: "pdf_ajax_progress"
+  delete "pdf" => "pdf#delete"
 end

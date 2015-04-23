@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Foo</title>
+
+    <style type="text/css">
+      @page {
+          size: auto;
+          margin: 0mm;
+      }
+      body {
+          margin: 0px;
+      }
+      .pdf {
+        background-color: white;
+        position: relative;
+        font-family: "Helvetica Neue";
+        font-size: 10pt;
+        font-weight: 300;
+        line-height: 1.25;
+      }
+      .pdf div.container {
+        height: 60em;
+        position: relative;
+      }
+      .pdf #number {
+        font-size: 70pt;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-right: -50%;
+        transform: translate(-50%, -50%);
+      }
+      .pdf h1 {
+        font-size: 12pt;
+      }
+    </style>
+    </head>
+  <body>
+  <div class="pdf">
+    <div class="container">
+      <div id="number">
+        substitute_me
+      </div>
+    </div>
+  </div>
+  </body>
+</html>
