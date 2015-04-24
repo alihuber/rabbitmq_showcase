@@ -13,4 +13,13 @@
   br
   .row
     .col-md-12
-      = render "working_queue"
+      table.table.table-striped
+        tr
+          th ID
+          th Created at
+          th File
+        = render partial: "pdf", collection: @pdfs
+
+      br
+      .row
+        = paginate @pdfs

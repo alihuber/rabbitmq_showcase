@@ -41,12 +41,6 @@ $(document).ready(function() {
 //     });
 //   }, 2000)
 
-  setInterval(function() {
-    return $.get("/pdf_ajax_progress", function(response) {
-      return $("#pdf-working-queue").replaceWith(response);
-    });
-  }, 500)
-
   $("#fetch_pdfs").click(function() {
     var count = $("#pdf_count").val();
     $("#fetch_pdfs").attr("name", count);

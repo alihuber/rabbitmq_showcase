@@ -1,7 +1,7 @@
 class PdfController < ApplicationController
 
   def index
-    @pdfs = Pdf.all
+    @pdfs = Pdf.order(:created_at).page(params[:page])
   end
 
   def work
@@ -14,12 +14,6 @@ class PdfController < ApplicationController
     path = "#{Rails.root}/tmp/pdf/"
     FileUtils.rm_rf(path)
     redirect_to pdf_path
-  end
-
-  def ajax_progress
-    @pdfs = Pdf.all
-
-    render partial: "working_queue"
   end
 
   private

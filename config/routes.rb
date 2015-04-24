@@ -20,6 +20,5 @@ Rails.application.routes.draw do
 
   get "pdf" => "pdf#index"
   post "pdf" => "pdf#work"
-  get "pdf_ajax_progress" => "pdf#ajax_progress", as: "pdf_ajax_progress"
   delete "pdf" => "pdf#delete"
 end
