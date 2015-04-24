@@ -5,7 +5,7 @@ class PdfController < ApplicationController
   end
 
   def work
-    publish_work
+    process_params(params)
     redirect_to pdf_path
   end
 
@@ -23,8 +23,15 @@ class PdfController < ApplicationController
   end
 
   private
-  def publish_work
-    10.times do |i|
+
+  def process_params(params)
+    input = params.keys[0].to_i
+    input.between?(1, 20) ? i = input : i = 10
+    publish_work(i)
+  end
+
+  def publish_work(n)
+    n.times do |i|
       source = File.read("#{Rails.root.to_s}/in.html")
       html   = source.gsub("substitute_me", "#{i.to_s}")
       Sneakers::Publisher.new.publish([i, html].to_json,

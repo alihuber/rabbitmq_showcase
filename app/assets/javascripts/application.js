@@ -46,4 +46,9 @@ $(document).ready(function() {
       return $("#pdf-working-queue").replaceWith(response);
     });
   }, 500)
+
+  $("#fetch_pdfs").click(function() {
+    var count = $("#pdf_count").val();
+    $("#fetch_pdfs").attr("name", count);
+  });
 });
