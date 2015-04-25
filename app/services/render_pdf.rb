@@ -3,7 +3,9 @@ require "fileutils"
 class RenderPdf
 
   def call(id, html)
-    pdf_renderer = PDFKit.new(html)
+    pdf_renderer = PDFKit.new(html,
+                              "footer-html" =>
+                                "#{Rails.root.to_s}/footer.html")
     File.open file_name(id), "wb" do |file|
       file.write pdf_renderer.to_pdf
     end
