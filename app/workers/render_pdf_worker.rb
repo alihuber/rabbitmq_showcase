@@ -2,8 +2,6 @@ class RenderPdfWorker
   include Sneakers::Worker
   from_queue "pdfs_in",
               timeout_job_after: 480, # 8 minutes
-              prefetch: 4,
-              threads: 4,
               arguments: { :"x-dead-letter-exchange" =>
                              "pdfs_in-retry" }
 

@@ -1,12 +1,11 @@
 default: &default
   encoding: unicode
   database: rabbitmq
-  pool: 5
+  pool: 50
   username: railsuser
   password:
   adapter: postgresql
-  pool: 5
-  timeout: 5000
+  timeout: 10000
 
 development:
   <<: *default

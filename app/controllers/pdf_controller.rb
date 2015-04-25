@@ -20,13 +20,17 @@ class PdfController < ApplicationController
 
   def process_params(params)
     input = params.keys[0].to_i
-    input.between?(1, 20) ? i = input : i = 10
+    input.between?(1, 200) ? i = input : i = 10
     publish_work(i)
   end
 
   def publish_work(n)
+    log_string = "#{n.to_s}\n#{Time.now.to_s}"
+    source = File.read("#{Rails.root.to_s}/in.html")
+    File.open "#{Rails.root.to_s}/time.txt", "wb" do |file|
+      file.write log_string
+    end
     n.times do |i|
-      source = File.read("#{Rails.root.to_s}/in.html")
       html   = source.gsub("substitute_me", "#{i.to_s}")
       Sneakers::Publisher.new.publish([i, html].to_json,
                                       to_queue: "pdfs_in",
