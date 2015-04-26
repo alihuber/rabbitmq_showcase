@@ -6,7 +6,8 @@ require_relative "../../lib/sneakers_maxretry_handler.rb"
 # WORKERS+=UploadPdfWorker,
 # WORKERS+=RenderPdfWorker,
 # WORKERS+=WorkflowInWorker,
-# WORKERS+=WorkflowOutWorker
+# WORKERS+=WorkflowOutWorker,
+# WORKERS+=ProcessPdfMessagesWorker
 # export WORKERS
 # rake sneakers:run
 

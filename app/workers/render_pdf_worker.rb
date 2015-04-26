@@ -9,19 +9,12 @@ class RenderPdfWorker
   def work(msg)
     logger.info("Received 'pdfs_in' message: #{msg}")
     work = JSON.parse(msg)
-    # One PDF per message
-    # work =  [count, "<html>"]
-    # file_name  = renderer.call(work[0], work[1])
-    # publish(file_name, to_queue: "pdfs_out")
-
-    # All PDFs at once
-    renderer   = RenderPdf.new
     work.each do |data|
-      file_name  = renderer.call(data[0], data[1])
-      publish(file_name, to_queue: "pdfs_out")
-      logger.info("Published file #{file_name} to 'pdfs_out'")
+      Sneakers::Publisher.new.publish(data.to_json,
+                                      to_queue: "pdfs_process",
+                                      persistence: true)
+      logger.info("Published file #{data[0]} to 'pdfs_process'")
     end
-    logger.info("Finished rendering PDFs!'")
     ack!
   end
 end
