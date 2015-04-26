@@ -8,15 +8,20 @@ class RenderPdfWorker
 
   def work(msg)
     logger.info("Received 'pdfs_in' message: #{msg}")
-    # work =  [count, "<html>"]
     work = JSON.parse(msg)
+    # One PDF per message
+    # work =  [count, "<html>"]
+    # file_name  = renderer.call(work[0], work[1])
+    # publish(file_name, to_queue: "pdfs_out")
 
+    # All PDFs at once
     renderer   = RenderPdf.new
-    file_name  = renderer.call(work[0], work[1])
-    publish(file_name, to_queue: "pdfs_out")
-    logger.info("Published file #{file_name} to 'pdfs_out'")
-
-    logger.info("Finished rendering PDF!'")
+    work.each do |data|
+      file_name  = renderer.call(data[0], data[1])
+      publish(file_name, to_queue: "pdfs_out")
+      logger.info("Published file #{file_name} to 'pdfs_out'")
+    end
+    logger.info("Finished rendering PDFs!'")
     ack!
   end
 end

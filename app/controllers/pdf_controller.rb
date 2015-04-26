@@ -20,7 +20,7 @@ class PdfController < ApplicationController
 
   def process_params(params)
     input = params.keys[0].to_i
-    input.between?(1, 200) ? i = input : i = 10
+    input.between?(1, 400) ? i = input : i = 10
     publish_work(i)
   end
 
@@ -30,11 +30,23 @@ class PdfController < ApplicationController
     File.open "#{Rails.root.to_s}/time.txt", "wb" do |file|
       file.write log_string
     end
+    # All PDFs at once
+    # [[i, <html>], [i, <html>]...]
+    work_array = []
     n.times do |i|
-      html   = source.gsub("substitute_me", "#{i.to_s}")
-      Sneakers::Publisher.new.publish([i, html].to_json,
-                                      to_queue: "pdfs_in",
-                                      persistence: true)
+      html = source.gsub("substitute_me", "#{i.to_s}")
+      work_array << [i, html]
     end
+    Sneakers::Publisher.new.publish(work_array.to_json,
+                                    to_queue: "pdfs_in",
+                                    persistence: true)
+    # One PDF per message
+    # n.times do |i|
+    #   html   = source.gsub("substitute_me", "#{i.to_s}")
+    #   Sneakers::Publisher.new.publish([i, html].to_json,
+    #                                   to_queue: "pdfs_in",
+    #                                   persistence: true)
+    # end
+    #
   end
 end

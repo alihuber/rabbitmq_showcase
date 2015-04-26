@@ -1,9 +1,9 @@
 listen 3000, tcp_nopush: false
 
 if ENV["RAILS_ENV"] == "development"
-  worker_processes 1
+  worker_processes 4
 else
-  worker_processes 3
+  worker_processes 4
 end
 
 CONN_SETTINGS = {

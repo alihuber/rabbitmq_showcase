@@ -1,7 +1,7 @@
 .container
   .row
     .col-md-3
-      = text_field_tag "count", nil, class: "form-control", id: "pdf_count", placeholder: "Fetch # PDFs (1 - 200, default: 10)"
+      = text_field_tag "count", nil, class: "form-control", id: "pdf_count", placeholder: "Fetch # PDFs (1 - 400, default: 10)"
     .col-md-2
       = button_to "Fetch PDFs", "pdf", method: :post,
         class: "btn btn-info", id: "fetch_pdfs", type: "submit",
