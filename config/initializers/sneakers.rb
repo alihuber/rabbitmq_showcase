@@ -2,12 +2,12 @@ require "sneakers"
 require "sneakers/metrics/logging_metrics"
 require_relative "../../lib/sneakers_maxretry_handler.rb"
 
-# WORKERS=''
-# WORKERS+=UploadPdfWorker,
 # WORKERS+=RenderPdfWorker,
 # WORKERS+=WorkflowInWorker,
 # WORKERS+=WorkflowOutWorker,
-# WORKERS+=ProcessPdfMessagesWorker
+# WORKERS+=ProcessPdfMessagesWorker,
+# WORKERS=''
+# WORKERS+=UploadPdfWorker
 # export WORKERS
 # rake sneakers:run
 
@@ -19,9 +19,9 @@ Sneakers.configure  heartbeat: 2,
                     metrics: Sneakers::Metrics::LoggingMetrics.new,
                     daemonize: false,
                     start_worker_delay: 0.2,
-                    workers: 4,
-                    prefetch: 20,
-                    threads: 20,
+                    workers: 1,
+                    prefetch: 1,
+                    threads: 1,
                     log:  STDOUT,
                     durable: true,
                     ack: true,

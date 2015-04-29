@@ -13,6 +13,7 @@ class PdfController < ApplicationController
     Pdf.destroy_all
     path = "#{Rails.root}/tmp/pdf/"
     FileUtils.rm_rf(path)
+    FileUtils.mkdir(path)
     redirect_to pdf_path
   end
 
@@ -20,7 +21,7 @@ class PdfController < ApplicationController
 
   def process_params(params)
     input = params.keys[0].to_i
-    input.between?(1, 400) ? i = input : i = 10
+    input.between?(1, 800) ? i = input : i = 10
     publish_work(i)
   end
 
@@ -37,9 +38,20 @@ class PdfController < ApplicationController
       html = source.gsub("substitute_me", "#{i.to_s}")
       work_array << [i, html]
     end
-    Sneakers::Publisher.new.publish(work_array.to_json,
-                                    to_queue: "pdfs_in",
-                                    persistence: true)
+    # Sneakers::Publisher.new.publish(work_array.to_json,
+    #                                 to_queue: "pdfs_in",
+    #                                 persistence: true)
+    conn = Bunny.new(host: "192.168.0.12", vhost: "test", user: "ubuntu", password: "ubuntu")
+    conn.start
+    ch   = conn.create_channel
+    q    = ch.queue("pdfs_in", durable: false, auto_delete: true)
+    q.publish(work_array.to_json, persistent: false)
+    puts
+    puts "*************************"
+    puts " [x] Sent #{work_array}"
+    puts "*************************"
+    puts
+    conn.close
     # One PDF per message
     # n.times do |i|
     #   html   = source.gsub("substitute_me", "#{i.to_s}")
