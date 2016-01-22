@@ -10,27 +10,56 @@ ApplicationController	app/controllers/application_controller.rb	/^class Applicat
 ApplicationHelper	app/helpers/application_helper.rb	/^module ApplicationHelper$/;"	m
 CreateSmokeTests	db/migrate/20150224193245_create_smoke_tests.rb	/^class CreateSmokeTests < ActiveRecord::Migration$/;"	c
 CreateTopics	db/migrate/20150228193832_create_topics.rb	/^class CreateTopics < ActiveRecord::Migration$/;"	c
+CreateWorkerMessages	db/migrate/20150329080424_create_worker_messages.rb	/^class CreateWorkerMessages < ActiveRecord::Migration$/;"	c
+CreateWorkflowMessages	db/migrate/20150329144945_create_workflow_messages.rb	/^class CreateWorkflowMessages < ActiveRecord::Migration$/;"	c
+Handlers	lib/sneakers_maxretry_handler.rb	/^  module Handlers$/;"	m	class:Sneakers
+Maxretry	lib/sneakers_maxretry_handler.rb	/^    class Maxretry$/;"	c	class:Sneakers.Handlers
 RabbitmqShowcase	config/application.rb	/^module RabbitmqShowcase$/;"	m
 SmokeTest	app/models/smoke_test.rb	/^class SmokeTest < ActiveRecord::Base$/;"	c
 SmokeTestController	app/controllers/smoke_test_controller.rb	/^class SmokeTestController < ApplicationController$/;"	c
 SmokeTestReceiver	app/services/smoke_test_receiver.rb	/^class SmokeTestReceiver$/;"	c
+Sneakers	lib/sneakers_maxretry_handler.rb	/^module Sneakers$/;"	m
 Topic	app/models/topic.rb	/^class Topic < ActiveRecord::Base$/;"	c
-TopicConsumer	config/unicorn.rb	/^  class TopicConsumer < Bunny::Consumer$/;"	c
 TopicController	app/controllers/topic_controller.rb	/^class TopicController < ApplicationController$/;"	c
 TopicReceiver	app/services/topic_receiver.rb	/^class TopicReceiver$/;"	c
+WorkerController	app/controllers/worker_controller.rb	/^class WorkerController < ApplicationController$/;"	c
+WorkerMessage	app/models/worker_message.rb	/^class WorkerMessage < ActiveRecord::Base$/;"	c
+WorkerReceiver	app/services/worker_receiver.rb	/^class WorkerReceiver$/;"	c
+WorkflowController	app/controllers/workflow_controller.rb	/^class WorkflowController < ApplicationController$/;"	c
+WorkflowInWorker	app/workers/workflow_in_worker.rb	/^class WorkflowInWorker$/;"	c
+WorkflowMessage	app/models/workflow_message.rb	/^class WorkflowMessage < ActiveRecord::Base$/;"	c
+WorkflowOutWorker	app/workers/workflow_out_worker.rb	/^class WorkflowOutWorker$/;"	c
+acknowledge	lib/sneakers_maxretry_handler.rb	/^      def acknowledge(hdr, props, msg)$/;"	f	class:Sneakers.Handlers.Maxretry
 ajax_progress	app/controllers/smoke_test_controller.rb	/^  def ajax_progress$/;"	f	class:SmokeTestController
 ajax_progress	app/controllers/topic_controller.rb	/^  def ajax_progress$/;"	f	class:TopicController
-cancelled?	config/unicorn.rb	/^    def cancelled?$/;"	f	class:TopicConsumer
+ajax_progress	app/controllers/worker_controller.rb	/^  def ajax_progress$/;"	f	class:WorkerController
+ajax_progress	app/controllers/workflow_controller.rb	/^  def ajax_progress$/;"	f	class:WorkflowController
 change	db/migrate/20150224193245_create_smoke_tests.rb	/^  def change$/;"	f	class:CreateSmokeTests
 change	db/migrate/20150228193832_create_topics.rb	/^  def change$/;"	f	class:CreateTopics
+change	db/migrate/20150329080424_create_worker_messages.rb	/^  def change$/;"	f	class:CreateWorkerMessages
+change	db/migrate/20150329144945_create_workflow_messages.rb	/^  def change$/;"	f	class:CreateWorkflowMessages
 create_record	app/services/smoke_test_receiver.rb	/^  def create_record(body)$/;"	f	class:SmokeTestReceiver
 create_record	app/services/topic_receiver.rb	/^  def create_record(routing_key, body)$/;"	f	class:TopicReceiver
+create_record	app/services/worker_receiver.rb	/^  def create_record(body, time)$/;"	f	class:WorkerReceiver
 delete	app/controllers/smoke_test_controller.rb	/^  def delete$/;"	f	class:SmokeTestController
 delete	app/controllers/topic_controller.rb	/^  def delete$/;"	f	class:TopicController
-handle_cancellation	config/unicorn.rb	/^    def handle_cancellation(_)$/;"	f	class:TopicConsumer
+delete	app/controllers/worker_controller.rb	/^  def delete$/;"	f	class:WorkerController
+delete	app/controllers/workflow_controller.rb	/^  def delete$/;"	f	class:WorkflowController
+error	lib/sneakers_maxretry_handler.rb	/^      def error(hdr, props, msg, err)$/;"	f	class:Sneakers.Handlers.Maxretry
+failure_count	lib/sneakers_maxretry_handler.rb	/^      def failure_count(headers)$/;"	f	class:Sneakers.Handlers.Maxretry
+get_records	app/controllers/topic_controller.rb	/^  def get_records$/;"	f	class:TopicController
+handle_retry	lib/sneakers_maxretry_handler.rb	/^      def handle_retry(hdr, props, msg, reason)$/;"	f	class:Sneakers.Handlers.Maxretry
 index	app/controllers/smoke_test_controller.rb	/^  def index$/;"	f	class:SmokeTestController
 index	app/controllers/topic_controller.rb	/^  def index$/;"	f	class:TopicController
+index	app/controllers/worker_controller.rb	/^  def index$/;"	f	class:WorkerController
+index	app/controllers/workflow_controller.rb	/^  def index$/;"	f	class:WorkflowController
 initialize	app/services/smoke_test_receiver.rb	/^  def initialize(delivery_info, properties, body)$/;"	f	class:SmokeTestReceiver
 initialize	app/services/topic_receiver.rb	/^  def initialize(routing_key, body)$/;"	f	class:TopicReceiver
-set_working_queue	app/controllers/smoke_test_controller.rb	/^  def set_working_queue$/;"	f	class:SmokeTestController
-set_working_queue	app/controllers/topic_controller.rb	/^  def set_working_queue$/;"	f	class:TopicController
+initialize	app/services/worker_receiver.rb	/^  def initialize(delivery_info, properties, body)$/;"	f	class:WorkerReceiver
+initialize	lib/sneakers_maxretry_handler.rb	/^      def initialize(channel, queue, opts)$/;"	f	class:Sneakers.Handlers.Maxretry
+log_prefix	lib/sneakers_maxretry_handler.rb	/^      def log_prefix$/;"	f	class:Sneakers.Handlers.Maxretry
+noop	lib/sneakers_maxretry_handler.rb	/^      def noop(hdr, props, msg)$/;"	f	class:Sneakers.Handlers.Maxretry
+reject	lib/sneakers_maxretry_handler.rb	/^      def reject(hdr, props, msg, requeue = false)$/;"	f	class:Sneakers.Handlers.Maxretry
+timeout	lib/sneakers_maxretry_handler.rb	/^      def timeout(hdr, props, msg)$/;"	f	class:Sneakers.Handlers.Maxretry
+work	app/workers/workflow_in_worker.rb	/^  def work(msg)$/;"	f	class:WorkflowInWorker
+work	app/workers/workflow_out_worker.rb	/^  def work(msg)$/;"	f	class:WorkflowOutWorker

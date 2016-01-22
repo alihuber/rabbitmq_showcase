@@ -39,7 +39,7 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  # unicorn settings, run with RACK_ENV=none RAILS_ENV=development unicorn -c config/unicorn.rb
+  # server log settings, run with RACK_ENV=none RAILS_ENV=development puma -C config/puma.rb
   config.logger = Logger.new(STDOUT)
     config.logger.level = Logger.const_get(
       ENV["LOG_LEVEL"] ? ENV["LOG_LEVEL"].upcase : "DEBUG"
