@@ -1,0 +1,12 @@
+worker_classes: &worker_classes
+  - WorkflowInWorker,
+  - WorkflowOutWorker
+
+development:
+  worker_classes: *worker_classes
+production:
+  worker_classes: *worker_classes
+staging:
+  worker_classes: *worker_classes
+test:
+  worker_classes: *worker_classes

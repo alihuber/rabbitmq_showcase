@@ -2,23 +2,43 @@ class WorkflowInWorker
   include Sneakers::Worker
   from_queue "workflow_in",
               handler: Sneakers::Handlers::Maxretry,
+              timeout_job_after: 60,
               arguments: { :"x-dead-letter-exchange" =>
                              "workflow_in-retry" }
 
 
   def work(msg)
+    msg = ActiveSupport::JSON.decode(msg)
     logger.info("Received 'workflow_in' message: #{msg}")
-    # fail and sleep for random amount of seconds
-    # to simulate error-prone work and make use of retry-queue
-    random = Random.new.rand(1..10)
-    if random == 5
-      logger.info("Rejected message: #{msg}, enqueued in retry-queue")
+    begin
+      if msg == "ack"
+        logger.info("Received 'ack' message, updating...")
+        publisher = Sneakers::Publisher.new
+        publisher.publish("first_read", to_queue: "workflow_out",
+                                                  persistence: true)
+        ActiveRecord::Base.connection_pool.with_connection do
+          SmokeTest.all.reverse.each do |st|
+            logger.info("Updating record with id #{st.id}:")
+            st.update_attribute("message", Faker::Company.ein)
+            logger.info("Updated record with id #{st.id}.\n")
+          end
+        end
+
+        publisher.publish("second_read", to_queue: "workflow_out",
+                                                   persistence: true)
+        if publisher.instance_variable_get("@bunny")
+          publisher.instance_variable_get("@bunny").close
+        end
+        return ack!
+      else
+        logger.info("Received '#{msg}' message, error forever")
+        return reject!
+      end
+    rescue Exception => ex
+      logger.info("Exception:")
+      logger.info(ex.message)
+      logger.info(ex.backtrace)
       return reject!
     end
-    sleep random
-    publish("Done heavy #{msg} work for #{random.to_s} secs",
-             to_queue: "workflow_out")
-    logger.info("Published to 'workflow_out'")
-    ack!
   end
 end
